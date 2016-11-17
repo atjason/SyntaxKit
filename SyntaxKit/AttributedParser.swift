@@ -10,7 +10,7 @@ public class AttributedParser: Parser {
 
 	// MARK: - Types
 
-	public typealias AttributedCallback = (scope: String, range: NSRange, attributes: Attributes?) -> Void
+	public typealias AttributedCallback = (_ scope: String, _ range: NSRange, _ attributes: Attributes?) -> Void
 
 
 	// MARK: - Properties
@@ -28,15 +28,15 @@ public class AttributedParser: Parser {
 
 	// MARK: - Parsing
 
-	public func parse(string: String, match callback: AttributedCallback) {
-		parse(string) { scope, range in
-			callback(scope: scope, range: range, attributes: self.attributesForScope(scope))
+	public func parse(string: String, match callback: @escaping AttributedCallback) {
+		parse(string: string) { scope, range in
+			callback(scope, range, self.attributesForScope(scope: scope))
 		}
 	}
 
 	public func attributedStringForString(string: String, baseAttributes: Attributes? = nil) -> NSAttributedString {
 		let output = NSMutableAttributedString(string: string, attributes: baseAttributes)
-		parse(string) { _, range, attributes in
+		parse(string: string) { _, range, attributes in
 			if let attributes = attributes {
 				output.addAttributes(attributes, range: range)
 			}
@@ -48,7 +48,7 @@ public class AttributedParser: Parser {
 	// MARK: - Private
 
 	private func attributesForScope(scope: String) -> Attributes? {
-		let components = scope.componentsSeparatedByString(".") as NSArray
+		let components = scope.components(separatedBy: ".") as NSArray
 		let count = components.count
 		if count == 0 {
 			return nil
@@ -56,7 +56,7 @@ public class AttributedParser: Parser {
 
 		var attributes = Attributes()
 		for i in 0..<components.count {
-			let key = (components.subarrayWithRange(NSMakeRange(0, count - 1 - i)) as NSArray).componentsJoinedByString(".")
+			let key = (components.subarray(with: NSMakeRange(0, count - 1 - i)) as NSArray).componentsJoined(by: ".")
 			if let attrs = theme.attributes[key] {
 				for (k, v) in attrs {
 					attributes[k] = v

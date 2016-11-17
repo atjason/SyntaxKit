@@ -32,33 +32,33 @@ final class Pattern {
 
 	// MARK: - Initializers
 
-	init?(dictionary: [NSObject: AnyObject], parent: Pattern? = nil) {
+	init?(dictionary: [String: AnyObject], parent: Pattern? = nil) {
 		self.parent = parent
 		self.name = dictionary["name"] as? String
 		self.match = dictionary["match"] as? String
 		self.begin = dictionary["begin"] as? String
 		self.end = dictionary["end"] as? String
 
-		if let dictionary = dictionary["beginCaptures"] as? [NSObject: AnyObject] {
+		if let dictionary = dictionary["beginCaptures"] as? [String: AnyObject] {
 			self.beginCaptures = CaptureCollection(dictionary: dictionary)
 		} else {
 			self.beginCaptures = nil
 		}
 
-		if let dictionary = dictionary["captures"] as? [NSObject: AnyObject] {
+		if let dictionary = dictionary["captures"] as? [String: AnyObject] {
 			self.captures = CaptureCollection(dictionary: dictionary)
 		} else {
 			self.captures = nil
 		}
 
-		if let dictionary = dictionary["endCaptures"] as? [NSObject: AnyObject] {
+		if let dictionary = dictionary["endCaptures"] as? [String: AnyObject] {
 			self.endCaptures = CaptureCollection(dictionary: dictionary)
 		} else {
 			self.endCaptures = nil
 		}
 
 		var patterns = [Pattern]()
-		if let array = dictionary["patterns"] as? [[NSObject: AnyObject]] {
+		if let array = dictionary["patterns"] as? [[String: AnyObject]] {
 			for value in array {
 				if let pattern = Pattern(dictionary: value, parent: parent) {
 					patterns.append(pattern)

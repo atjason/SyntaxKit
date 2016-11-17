@@ -39,7 +39,7 @@ struct ResultSet {
 
 	mutating func addResults(resultSet: ResultSet) {
 		for result in resultSet.results {
-			addResult(result)
+			addResult(result: result)
 		}
 	}
 }
